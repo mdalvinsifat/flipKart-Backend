@@ -1,6 +1,6 @@
 const express =require("express")
 // const upload = require("../middlewares/multer")
-const { GetAllProduct, CreateAllProduct } = require("../controller/ProductController")
+const { GetAllProduct, CreateAllProduct, updateProduct, GetSingleProduct, DeleteSingleProduct } = require("../controller/ProductController")
 const upload = require("../middlewares/multer")
 
 
@@ -18,17 +18,17 @@ router.post("/",  upload.fields([
 
 router.get("/", GetAllProduct)
 
-// router.put("/:id", upload.fields([
-//     {name : "image", maxCount :1 },
-//     {name : "SubImageOne", maxCount :1 },
-//     {name : "SubImageTWo", maxCount :1 },
-//     {name : "SubImageThree", maxCount :1 },
-//     {name : "SubImageFour", maxCount :1 },
-// ]),UpdateAllProduct)
+router.put("/:id", upload.fields([
+    {name : "image", maxCount :1 },
+    {name : "SubImageOne", maxCount :1 },
+    {name : "SubImageTwo", maxCount :1 },
+    {name : "SubImageThree", maxCount :1 },
+    {name : "SubImageFour", maxCount :1 },
+]),updateProduct)
 
 
-// router.get("/:id", GetSingleProduct)
-// router.delete("/:id", DeleteSingleProduct)
+router.get("/:id", GetSingleProduct)
+router.delete("/:id", DeleteSingleProduct)
 
 
 
