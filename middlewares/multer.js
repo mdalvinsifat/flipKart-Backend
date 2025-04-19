@@ -1,8 +1,9 @@
 
+
 const multer = require("multer")
 const path = require("path")
 const uploadDir = 'uploads/';
-
+const AuthDir = "authUploads"
 const storage = multer.diskStorage({
     destination : function(req, file , cd ) {
         cd (null, uploadDir)
@@ -15,7 +16,21 @@ const storage = multer.diskStorage({
 });
 
 
-    const upload = multer({storage:storage})
+
+const authUpload = multer.diskStorage({
+  destination : function(req, file , cd ) {
+    cd (null, AuthDir)
+}, 
+filename : function(req , file , cd ){
+    const extname = path.extname(file.originalname)
+
+    cd(null, Date.now() + "-" + file.originalname)
+},
+})
 
 
-module.exports = upload
+exports.upload = multer({storage:storage})
+exports.authUpload = multer({storage : authUpload})
+
+
+

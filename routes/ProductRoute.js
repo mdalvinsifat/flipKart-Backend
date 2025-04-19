@@ -1,7 +1,7 @@
 const express =require("express")
 // const upload = require("../middlewares/multer")
 const { GetAllProduct, CreateAllProduct, updateProduct, GetSingleProduct, DeleteSingleProduct } = require("../controller/ProductController")
-const upload = require("../middlewares/multer")
+const {upload} = require("../middlewares/multer")
 
 
 const router = express.Router()

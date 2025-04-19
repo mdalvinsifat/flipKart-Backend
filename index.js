@@ -8,6 +8,7 @@ const router = require("./routes/OfferRoutes")
 const category = require("./routes/CategoryRoute")
 const order = require("./routes/OrderRoutes")
 const product = require("./routes/ProductRoute")
+const Auth = require("./routes/AuthRouter")
 const app = express()
 
 
@@ -21,6 +22,7 @@ app.use("/offer", router)
 app.use("/category", category)
 app.use("/order", order)
 app.use("/product", product)
+app.use("/auth", Auth)
 const PORT = process.env.PORT || 8080 
 ConnectDB()
 

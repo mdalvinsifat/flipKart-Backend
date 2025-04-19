@@ -1,5 +1,6 @@
 const Product = require("../models/ProductModel")
-
+const path = require("path")
+const fs = require("fs")
 
 exports.GetAllProduct =  async(req, res) =>{
     try {
@@ -89,13 +90,11 @@ exports.CreateAllProduct = async (req, res) => {
         OfferModel,
       } = req.body;
   
-      // Find existing product
       const product = await Product.findById(id);
       if (!product) {
         return res.status(404).json({ success: false, message: "Product not found" });
       }
   
-      // Handle uploaded files (if any)
       if (req.files) {
         if (req.files["image"]) {
           product.image = req.files["image"][0].filename;
@@ -152,6 +151,33 @@ exports.CreateAllProduct = async (req, res) => {
 
   exports.DeleteSingleProduct = async(req , res ) =>{
     try {
+
+
+      const subProduct = await Product.findById(req.params.id)
+
+      const imageToDelete = [
+        subProduct.image,
+        subProduct.SubImageFour,
+        subProduct.SubImageOne,
+        subProduct.SubImageTwo,
+        subProduct.SubImageThree
+      ]
+
+      for(const image of imageToDelete) { 
+        const imagePath = path.join(__dirname, "../uploads", image); 
+      try {
+        if(imagePath){
+
+          await fs.promises.unlink(imagePath)
+          console.log("Product image Deleted")
+        }
+        
+      } catch (error) {
+        console.log(`delete image is error on ${error}`)
+
+      }
+      }
+
       const Products = await Product.findByIdAndDelete(req.params.id)
       res.status(200).json({ success: true, Products });
 
