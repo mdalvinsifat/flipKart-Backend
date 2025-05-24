@@ -12,7 +12,9 @@ const Auth = require("./routes/AuthRouter")
 const app = express()
 
 
-app.use(express.json())
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 dotenv.config()
 app.use(morgan("dev"))
