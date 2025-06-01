@@ -22,23 +22,33 @@ exports.GetOfferProduct= async(req, res) =>{
 
 // Post Offer 
 
-exports.CreateOfferProduct= async(req, res)  =>{
+exports.CreateOfferProduct = async (req, res) => {
     try {
-        const {name , descriptions} = req.body 
-        const offerProduct = await OfferModel({name , descriptions})
-        await offerProduct.save()
+        console.log("Request Body:", req.body); // debug log
+
+        const { name, descriptions } = req.body;
+
+        if (!name || !descriptions) {
+            return res.status(400).json({
+                success: false,
+                message: "name and descriptions are required"
+            });
+        }
+
+        const offerProduct = await OfferModel.create({ name, descriptions });
         res.status(201).json({
-            success:true , 
-            messsage:"user Create Successfully", 
+            success: true,
+            message: "Offer Created Successfully",
             offerProduct
-        })
+        });
     } catch (error) {
+        console.log("Error in CreateOfferProduct:", error.message);
         res.status(501).send({
-            success:false, 
-            message:"Catch error showing"
-        })
+            success: false,
+            message: "Catch error showing"
+        });
     }
-}
+};
 
 // Update offer 
 exports.UpdateOfferProduct= async(req, res)  =>{

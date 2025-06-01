@@ -7,13 +7,18 @@ const {upload} = require("../middlewares/multer")
 const router = express.Router()
 
 
-router.post("/",  upload.fields([
-    {name : "image", maxCount :1 },
-    {name : "SubImageOne", maxCount :1 },
-    {name : "SubImageTwo", maxCount :1 },
-    {name : "SubImageThree", maxCount :1 },
-    {name : "SubImageFour", maxCount :1 },
-]), CreateAllProduct)
+router.post(
+  "/",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "SubImageOne", maxCount: 1 },
+    { name: "SubImageTwo", maxCount: 1 },
+    { name: "SubImageThree", maxCount: 1 },
+    { name: "SubImageFour", maxCount: 1 },
+  ]),
+  CreateAllProduct
+);
+
 
 
 router.get("/", GetAllProduct)

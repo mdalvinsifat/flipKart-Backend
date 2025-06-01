@@ -149,42 +149,46 @@ exports.CreateAllProduct = async (req, res) => {
   }
 
 
-  exports.DeleteSingleProduct = async(req , res ) =>{
-    try {
+  exports.DeleteSingleProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-
-      const subProduct = await Product.findById(req.params.id)
-
-      const imageToDelete = [
-        subProduct.image,
-        subProduct.SubImageFour,
-        subProduct.SubImageOne,
-        subProduct.SubImageTwo,
-        subProduct.SubImageThree
-      ]
-
-      for(const image of imageToDelete) { 
-        const imagePath = path.join(__dirname, "../uploads", image); 
-      try {
-        if(imagePath){
-
-          await fs.promises.unlink(imagePath)
-          console.log("Product image Deleted")
-        }
-        
-      } catch (error) {
-        console.log(`delete image is error on ${error}`)
-
-      }
-      }
-
-      const Products = await Product.findByIdAndDelete(req.params.id)
-      res.status(200).json({ success: true, Products });
-
-    } catch (error) {
-      console.error("updateProduct Error:", error);
-      res.status(500).json({ success: false, message: "Server Error" });
+    if (!id) {
+      return res.status(400).json({ success: false, message: "Product ID is required" });
     }
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    // Delete image files if they exist
+    const imageFields = [
+      product.image,
+      product.SubImageOne,
+      product.SubImageTwo,
+      product.SubImageThree,
+      product.SubImageFour,
+    ];
+
+    for (const image of imageFields) {
+      if (image) {
+        const imagePath = path.join(__dirname, "../uploads", image);
+        try {
+          await fs.promises.unlink(imagePath);
+          console.log(`Deleted image: ${image}`);
+        } catch (err) {
+          console.error(`Error deleting image ${image}:`, err.message);
+        }
+      }
+    }
+
+    const deletedProduct = await Product.findByIdAndDelete(id);
+    return res.status(200).json({ success: true, product: deletedProduct });
+  } catch (error) {
+    console.error("DeleteSingleProduct Error:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
+};
 
 
